@@ -9,6 +9,8 @@ const LoanForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [devToken, setDevToken] = useState('');
+  const [showDevPanel, setShowDevPanel] = useState(false);
 
   const [formData, setFormData] = useState({
     brand: '',
@@ -51,6 +53,38 @@ const LoanForm: React.FC = () => {
         ...prev,
         [name]: name === 'type' ? value : name === 'value' || name === 'downPayment' ? Number(value) : value,
       }));
+    }
+  };
+  const handleTokenLogin = () => {
+    if (!devToken.trim()) {
+      setError('Por favor, insira um token válido.');
+      return;
+    }
+
+    try {
+      // Salva o token no localStorage
+      localStorage.setItem('authToken', devToken.trim());
+      
+      // Decodifica o token JWT para extrair informações do usuário
+      const parts = devToken.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Token inválido');
+      }
+      
+      const payload = JSON.parse(atob(parts[1]));
+      const mockUser = {
+        _id: payload.sub || 'mock-user-id',
+        name: payload.name || 'Usuário Mock',
+        email: payload.email || 'mock@example.com',
+        role: payload.role || 'customer',
+      };
+      
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      
+      // Força um reload para aplicar o login
+      window.location.reload();
+    } catch (err) {
+      setError('Erro ao processar token. Verifique se o formato está correto.');
     }
   };
 
@@ -122,6 +156,54 @@ const LoanForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Painel de Desenvolvimento - Token */}
+          <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🔧</span>
+                <h3 className="text-sm font-bold text-yellow-900">Modo Desenvolvimento</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDevPanel(!showDevPanel)}
+                className="text-yellow-700 hover:text-yellow-900 font-medium text-sm"
+              >
+                {showDevPanel ? '▼ Ocultar' : '▶ Expandir'}
+              </button>
+            </div>
+          
+            {showDevPanel && (
+              <div className="space-y-3">
+                <p className="text-xs text-yellow-800">
+                  Cole o token JWT enviado pelo backend da loja para simular login
+                </p>
+                <textarea
+                  value={devToken}
+                  onChange={(e) => setDevToken(e.target.value)}
+                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  rows={3}
+                  className="w-full px-3 py-2 bg-white border border-yellow-300 rounded-lg text-gray-900 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleTokenLogin}
+                    className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors"
+                  >
+                    Aplicar Token
+                  </button>
+                  {user && (
+                    <div className="flex-1 bg-green-100 border border-green-300 rounded-lg px-3 py-2">
+                      <p className="text-xs text-green-800">
+                        ✓ Logado como: <strong>{user.name}</strong> ({user.email})
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
         {/* Marca e Modelo */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

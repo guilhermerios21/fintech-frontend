@@ -46,6 +46,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setToken(null);
   };
 
+  const applyToken = (rawToken: string, injectedUser: IUser) => {
+    localStorage.setItem('authToken', rawToken);
+    localStorage.setItem('user', JSON.stringify(injectedUser));
+    setToken(rawToken);
+    setUser(injectedUser);
+  };
+
   const value: AuthContextType = {
     user,
     token,
@@ -54,6 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     logout,
     isAuthenticated: !!token && !!user,
     isLoading,
+    applyToken,
   };
 
   return (

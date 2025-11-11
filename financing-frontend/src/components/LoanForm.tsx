@@ -5,7 +5,7 @@ import { VehicleType } from '../types/index.js';
 import Spinner from './Spinner';
 
 const LoanForm: React.FC = () => {
-  const { user } = useAuth();
+  const { user, applyToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -62,9 +62,6 @@ const LoanForm: React.FC = () => {
     }
 
     try {
-      // Salva o token no localStorage
-      localStorage.setItem('authToken', devToken.trim());
-      
       // Decodifica o token JWT para extrair informações do usuário
       const parts = devToken.split('.');
       if (parts.length !== 3) {
@@ -78,11 +75,10 @@ const LoanForm: React.FC = () => {
         email: payload.email || 'mock@example.com',
         role: payload.role || 'customer',
       };
-      
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      // Força um reload para aplicar o login
-      window.location.reload();
+
+      // Aplica o token via contexto, sem recarregar a página
+      applyToken?.(devToken.trim(), mockUser);
+      setError('');
     } catch (err) {
       setError('Erro ao processar token. Verifique se o formato está correto.');
     }

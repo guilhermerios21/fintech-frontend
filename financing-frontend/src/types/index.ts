@@ -89,6 +89,8 @@ export interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
+  // Permite aplicar um token (modo dev) sem recarregar a página
+  applyToken?: (token: string, user: IUser) => void;
 }
 
 // Export default vazio para permitir imports default

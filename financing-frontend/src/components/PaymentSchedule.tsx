@@ -1,5 +1,5 @@
-import React from 'react';
-import { IAmortizationItem } from '../types/index.js';
+import * as React from 'react';
+import { IAmortizationItem } from '../types';
 import { formatCurrency } from '@services/api';
 
 interface PaymentScheduleProps {

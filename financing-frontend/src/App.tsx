@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@store/index';
 import Home from '@pages/Home';

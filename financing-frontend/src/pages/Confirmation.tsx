@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { financeService } from '@services/api';
-import { IFinance } from '../types/index.js';
+import { IFinance } from '../types';
 import MainStyle from '@components/MainStyle';
 import Spinner from '@components/Spinner';
 

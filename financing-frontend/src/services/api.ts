@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { IFinance, ILoanFormData, ApiResponse, IUser } from '../types/index.js';
+import { IFinance, ILoanFormData, ApiResponse, IUser } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -14,21 +14,21 @@ const apiClient: AxiosInstance = axios.create({
 
 // Interceptor para adicionar o token em todas as requisições
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const token = localStorage.getItem('authToken');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );
 
 // Interceptor para tratar erros de resposta
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response: any) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       // Token expirado ou inválido
@@ -92,7 +92,7 @@ export const financeService = {
   // Criar um novo financiamento
   async createFinance(data: ILoanFormData): Promise<ApiResponse<IFinance>> {
     try {
-      const response = await apiClient.post('/api/tasks', {
+      const response = await apiClient.post('/api/finances', {
         ...data,
         financeDate: new Date(),
         status: 'pending',
@@ -106,7 +106,7 @@ export const financeService = {
   // Buscar todos os financiamentos do usuário
   async getFinances(filters?: Record<string, any>): Promise<ApiResponse<IFinance[]>> {
     try {
-      const response = await apiClient.get('/tasks', { params: filters });
+      const response = await apiClient.get('/api/finances', { params: filters });
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Erro ao buscar financiamentos');
@@ -116,7 +116,7 @@ export const financeService = {
   // Buscar um financiamento específico
   async getFinanceById(id: string): Promise<ApiResponse<IFinance>> {
     try {
-      const response = await apiClient.get(`/tasks/${id}`);
+      const response = await apiClient.get(`/api/finances/${id}`);
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Erro ao buscar financiamento');
@@ -126,7 +126,7 @@ export const financeService = {
   // Atualizar financiamento (completo)
   async updateFinance(id: string, data: Partial<IFinance>): Promise<ApiResponse<IFinance>> {
     try {
-      const response = await apiClient.put(`/tasks/${id}`, data);
+      const response = await apiClient.put(`/api/finances/${id}`, data);
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Erro ao atualizar financiamento');
@@ -136,7 +136,7 @@ export const financeService = {
   // Atualizar financiamento (parcial)
   async patchFinance(id: string, data: Partial<IFinance>): Promise<ApiResponse<IFinance>> {
     try {
-      const response = await apiClient.patch(`/tasks/${id}`, data);
+      const response = await apiClient.patch(`/api/finances/${id}`, data);
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Erro ao atualizar financiamento');
@@ -146,7 +146,7 @@ export const financeService = {
   // Deletar financiamento
   async deleteFinance(id: string): Promise<ApiResponse> {
     try {
-      const response = await apiClient.delete(`/tasks/${id}`);
+      const response = await apiClient.delete(`/api/finances/${id}`);
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Erro ao deletar financiamento');

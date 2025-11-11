@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { financeService, formatCurrency, formatDate } from '@services/api';
 import { useAuth } from '@store/index';
-import { IFinance } from '../types/index.js';
+import { IFinance } from '../types';
 import MainStyle from '@components/MainStyle';
 import PaymentSchedule from '@components/PaymentSchedule';
 import Spinner from '@components/Spinner';

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { financeService, formatCurrency } from '@services/api';
 import { useAuth } from '@store/index';
-import { VehicleType } from '../types/index.js';
+import { VehicleType } from '../types';
 import Spinner from './Spinner';
 
 const LoanForm: React.FC = () => {

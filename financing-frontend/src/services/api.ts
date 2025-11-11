@@ -92,7 +92,7 @@ export const financeService = {
   // Criar um novo financiamento
   async createFinance(data: ILoanFormData): Promise<ApiResponse<IFinance>> {
     try {
-      const response = await apiClient.post('/tasks', {
+      const response = await apiClient.post('/api/tasks', {
         ...data,
         financeDate: new Date(),
         status: 'pending',

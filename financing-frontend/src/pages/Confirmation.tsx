@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { financeService } from '@services/api';
-import { IFinance } from '@types/index';
+import { IFinance } from '../types/index.js';
 import MainStyle from '@components/MainStyle';
 import Spinner from '@components/Spinner';
 
@@ -19,8 +19,9 @@ const Confirmation: React.FC = () => {
   const loadFinance = async () => {
     if (!id) return;
     try {
-      const response = await financeService.getFinanceById(id);
-      setFinance(response.finance);
+  const response = await financeService.getFinanceById(id);
+  // response.finance may be undefined depending on API shape — normalize to null
+  setFinance(response.finance ?? null);
     } catch (err) {
       console.error(err);
     } finally {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { financeService, formatCurrency, formatDate } from '@services/api';
 import { useAuth } from '@store/index';
-import { IFinance } from '@types/index';
+import { IFinance } from '../types/index.js';
 import MainStyle from '@components/MainStyle';
 import PaymentSchedule from '@components/PaymentSchedule';
 import Spinner from '@components/Spinner';
@@ -25,7 +25,13 @@ const Status: React.FC = () => {
   const loadFinances = async () => {
     try {
       const response = await financeService.getFinances();
-      setFinances(response.finances || []);
+      // normalize API response: some backends may return nested arrays
+      const financesRaw = (response as any).finances ?? [];
+      const normalized: IFinance[] = Array.isArray(financesRaw)
+        ? // flatten one level if needed
+          ([] as IFinance[]).concat(...(financesRaw as any))
+        : [];
+      setFinances(normalized);
     } catch (err: any) {
       setError(err.message);
     } finally {

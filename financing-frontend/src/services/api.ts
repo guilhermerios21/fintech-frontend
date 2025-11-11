@@ -34,7 +34,9 @@ apiClient.interceptors.response.use(
       // Token expirado ou inválido
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Evita navegar para rota inexistente no SPA
+      // Opcionalmente, poderíamos exibir um toast e redirecionar para a home
+      // window.location.hash = '#/';
     }
     return Promise.reject(error);
   }

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": "cd financing-frontend && npm install && npm run build",
+  "outputDirectory": "financing-frontend/dist",
+  "framework": "vite",
+  "installCommand": "cd financing-frontend && npm install",
+  "devCommand": "cd financing-frontend && npm run dev",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

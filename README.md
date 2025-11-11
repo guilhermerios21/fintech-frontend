@@ -1,190 +1,377 @@
-## Backend em Express com Autenticação JWT e MongoDB
+# Financing System - Frontend## Backend em Express com Autenticação JWT e MongoDB
 
-API RESTful construída com Node.js, Express 5, TypeScript e MongoDB (via Mongoose), com autenticação JWT, rotas protegidas e um CRUD de tarefas com exclusão lógica (soft delete).
 
----
 
-## ✨ Recursos
+Sistema de financiamento de veículos com interface moderna e responsiva.API RESTful construída com Node.js, Express 5, TypeScript e MongoDB (via Mongoose), com autenticação JWT, rotas protegidas e um CRUD de tarefas com exclusão lógica (soft delete).
 
-- Cadastro e login de usuários com senha criptografada (bcrypt)
-- Autenticação com JWT e middleware de proteção
-- CRUD de tarefas por usuário (criar, listar, obter, atualizar total/parcial, deletar e restaurar)
-- Exclusão lógica de tarefas (flag `deleted`)
-- Validações básicas e middleware de erros
+
+
+## 🚀 Tecnologias---
+
+
+
+- **React 18.2** - Biblioteca UI## ✨ Recursos
+
+- **TypeScript 5.3** - Tipagem estática
+
+- **Vite 5.4** - Build tool e dev server- Cadastro e login de usuários com senha criptografada (bcrypt)
+
+- **TailwindCSS 3.3** - Framework CSS utilitário- Autenticação com JWT e middleware de proteção
+
+- **React Router v6** - Navegação SPA- CRUD de tarefas por usuário (criar, listar, obter, atualizar total/parcial, deletar e restaurar)
+
+- **Axios 1.6** - Cliente HTTP- Exclusão lógica de tarefas (flag `deleted`)
+
+- **Context API** - Gerenciamento de estado- Validações básicas e middleware de erros
+
 - Suporte a Docker (MongoDB + Mongo Express), TypeScript e scripts de desenvolvimento
 
+## ✨ Funcionalidades
+
 ---
 
-## 🧰 Stack
+- 🎨 Interface moderna com tema claro (roxo #6D4AFF)
 
-- Node.js 20
-- Express 5
-- TypeScript 5
-- Mongoose 8 (MongoDB)
+- 📱 Design 100% responsivo## 🧰 Stack
+
+- 🔐 Sistema de autenticação JWT
+
+- 💰 Simulador de financiamento com cálculo de parcelas- Node.js 20
+
+- 📊 Tabela de amortização detalhada- Express 5
+
+- 📈 Acompanhamento de status de solicitações- TypeScript 5
+
+- ⚡ Performance otimizada com Vite- Mongoose 8 (MongoDB)
+
 - JSON Web Token (JWT)
-- bcryptjs
+
+## 🛠️ Instalação e Uso- bcryptjs
+
 - Docker (opcional para o banco)
 
+### Pré-requisitos
+
 ---
 
-## 📂 Estrutura de Pastas
+- Node.js 18+ 
 
-```
+- npm ou yarn## 📂 Estrutura de Pastas
+
+
+
+### Instalação```
+
 .
-├─ Dockerfile
-├─ docker-compose.yml              # MongoDB + Mongo Express
-├─ package.json
-├─ tsconfig.json
+
+```bash├─ Dockerfile
+
+# Clone o repositório├─ docker-compose.yml              # MongoDB + Mongo Express
+
+git clone https://github.com/guilhermerios21/fintech-frontend.git├─ package.json
+
+cd fintech-frontend├─ tsconfig.json
+
 ├─ requests/
-│  └─ resquests.yml                # Coleção Postman
-└─ src/
+
+# Entre na pasta do frontend│  └─ resquests.yml                # Coleção Postman
+
+cd financing-frontend└─ src/
+
 	 ├─ server.ts                    # Bootstrap do servidor
-	 ├─ database/
-	 │  └─ connect.ts                # Conexão com MongoDB (MONGODB_URI)
+
+# Instale as dependências	 ├─ database/
+
+npm install	 │  └─ connect.ts                # Conexão com MongoDB (MONGODB_URI)
+
 	 ├─ models/
-	 │  ├─ User.ts                   # Schema de usuário
-	 │  └─ Task.ts                   # Schema de tarefa (soft delete)
-	 ├─ services/
+
+# Configure as variáveis de ambiente	 │  ├─ User.ts                   # Schema de usuário
+
+cp .env.example .env	 │  └─ Task.ts                   # Schema de tarefa (soft delete)
+
+```	 ├─ services/
+
 	 │  ├─ UserService.ts            # Login e registro + geração de JWT
-	 │  └─ taskServices.ts           # Regras de negócio de tarefas
+
+### Configuração	 │  └─ taskServices.ts           # Regras de negócio de tarefas
+
 	 ├─ controllers/
-	 │  ├─ userController.ts
+
+Edite o arquivo `.env` com suas configurações:	 │  ├─ userController.ts
+
 	 │  ├─ taskController.ts
-	 │  └─ protectedController.ts
-	 ├─ middleware/
-	 │  ├─ protectedMiddleware.ts    # Verifica e decodifica JWT
-	 │  └─ errorMiddlleware.ts       # Tratamento de erros
+
+```env	 │  └─ protectedController.ts
+
+VITE_API_URL=http://localhost:5000	 ├─ middleware/
+
+VITE_APP_NAME=Financing System	 │  ├─ protectedMiddleware.ts    # Verifica e decodifica JWT
+
+```	 │  └─ errorMiddlleware.ts       # Tratamento de erros
+
 	 ├─ routes/
-	 │  ├─ userRoute.ts              # /api/register, /api/login
+
+### Executar em Desenvolvimento	 │  ├─ userRoute.ts              # /api/register, /api/login
+
 	 │  ├─ taskRoutes.ts             # /api/tasks...
-	 │  └─ protectedRoute.ts         # /api/protected
-	 └─ types/
-			└─ environment.d.ts          # Tipagem das variáveis de ambiente
+
+```bash	 │  └─ protectedRoute.ts         # /api/protected
+
+npm run dev	 └─ types/
+
+```			└─ environment.d.ts          # Tipagem das variáveis de ambiente
+
 ```
 
+Acesse: http://localhost:3000
+
 ---
+
+### Build para Produção
 
 ## ⚙️ Pré-requisitos
 
-- Node.js 18+ (recomendado 20)
-- npm 9+
-- Docker (opcional, para subir MongoDB localmente)
+```bash
 
----
+npm run build- Node.js 18+ (recomendado 20)
 
-## 🔐 Variáveis de Ambiente (.env)
+npm run preview- npm 9+
 
-Crie um arquivo `.env` na raiz do projeto com:
+```- Docker (opcional, para subir MongoDB localmente)
+
+
+
+## 📁 Estrutura do Projeto---
+
+
+
+```## 🔐 Variáveis de Ambiente (.env)
+
+financing-frontend/
+
+├── src/Crie um arquivo `.env` na raiz do projeto com:
+
+│   ├── components/        # Componentes reutilizáveis
+
+│   │   ├── Header.tsx```
+
+│   │   ├── Footer.tsxPORT=3000
+
+│   │   ├── LoanForm.tsx# Se usar o docker-compose deste repo, use auth básica (admin) e escolha um DB (ex.: miniprojeto)
+
+│   │   └── PaymentSchedule.tsxMONGODB_URI=mongodb://root:example@localhost:27017/miniprojeto?authSource=admin
+
+│   ├── pages/            # Páginas da aplicaçãoJWT_SECRET=uma_chave_muito_secreta
+
+│   │   ├── Home.tsx```
+
+│   │   ├── Apply.tsx
+
+│   │   ├── Status.tsxObservações:
+
+│   │   └── Confirmation.tsx- `MONGODB_URI` é obrigatório. O app encerra se estiver ausente.
+
+│   ├── services/         # Integração com API- `JWT_SECRET` é obrigatório para assinar/verificar tokens.
+
+│   │   └── api.ts- `PORT` é opcional (padrão 3000).
+
+│   ├── store/           # Context API
+
+│   │   └── index.tsx---
+
+│   ├── types/           # Definições TypeScript
+
+│   │   └── index.ts## 🚀 Como rodar
+
+│   ├── styles/          # Estilos globais
+
+│   │   └── globals.css### 1) Subir somente o banco via Docker Compose (opcional, recomendado)
+
+│   └── App.tsx          # Componente raiz
+
+├── public/              # Arquivos estáticosNo diretório do projeto:
+
+├── .env.example         # Template de variáveis
+
+└── vite.config.ts       # Configuração do Vite```powershell
+
+```docker compose up -d
 
 ```
-PORT=3000
-# Se usar o docker-compose deste repo, use auth básica (admin) e escolha um DB (ex.: miniprojeto)
-MONGODB_URI=mongodb://root:example@localhost:27017/miniprojeto?authSource=admin
-JWT_SECRET=uma_chave_muito_secreta
-```
 
-Observações:
-- `MONGODB_URI` é obrigatório. O app encerra se estiver ausente.
-- `JWT_SECRET` é obrigatório para assinar/verificar tokens.
-- `PORT` é opcional (padrão 3000).
-
----
-
-## 🚀 Como rodar
-
-### 1) Subir somente o banco via Docker Compose (opcional, recomendado)
-
-No diretório do projeto:
-
-```powershell
-docker compose up -d
-```
+## 🎨 Design System
 
 Isso cria:
-- MongoDB em `mongodb://root:example@localhost:27017/` (authSource=admin)
+
+### Cores- MongoDB em `mongodb://root:example@localhost:27017/` (authSource=admin)
+
 - Mongo Express em http://localhost:8081 (login: mongoexpressuser / mongoexpresspass)
 
-Depois, aponte o `MONGODB_URI` no `.env` para seu banco (ex.: `.../miniprojeto?authSource=admin`).
+- **Primário**: `#6D4AFF` (Roxo)
 
-### 2) Instalar dependências
+- **Hover**: `#5938F0` (Roxo escuro)Depois, aponte o `MONGODB_URI` no `.env` para seu banco (ex.: `.../miniprojeto?authSource=admin`).
+
+- **Background**: `#F2F2F4` (Cinza claro)
+
+- **Surface**: `#FFFFFF` (Branco)### 2) Instalar dependências
+
+- **Texto**: `#111827` (Cinza escuro)
 
 ```powershell
-npm install
+
+### Tipografianpm install
+
 ```
 
-### 3a) Rodar em desenvolvimento (TypeScript com reload)
+- **Fonte**: Inter (Google Fonts)
 
-```powershell
+- **Pesos**: 400, 500, 600, 700### 3a) Rodar em desenvolvimento (TypeScript com reload)
+
+
+
+## 🚀 Deploy```powershell
+
 npm run dev
-```
 
-Servidor em http://localhost:3000
+### Vercel (Recomendado)```
 
-### 3b) Rodar build de produção
 
-```powershell
-npm run build
-npm start
-```
 
-### 3c) Rodar a API em Docker (sem docker-compose)
+Consulte o guia completo em [DEPLOY_VERCEL.md](./DEPLOY_VERCEL.md)Servidor em http://localhost:3000
 
-```powershell
+
+
+**Deploy rápido:**### 3b) Rodar build de produção
+
+
+
+```bash```powershell
+
+npm install -g vercelnpm run build
+
+vercel --prodnpm start
+
+``````
+
+
+
+### Configurar Variáveis de Ambiente### 3c) Rodar a API em Docker (sem docker-compose)
+
+
+
+No dashboard da Vercel, adicione:```powershell
+
 # Build da imagem
-docker build -t mini-projeto-api .
+
+- `VITE_API_URL` - URL do backend em produçãodocker build -t mini-projeto-api .
+
+- `VITE_APP_NAME` - Nome da aplicação
 
 # Executar container passando o .env
-docker run --name mini-projeto-api -p 3000:3000 --env-file .env mini-projeto-api
+
+## 🔗 Integração com Backenddocker run --name mini-projeto-api -p 3000:3000 --env-file .env mini-projeto-api
+
 ```
 
+Este frontend se conecta com a API REST do backend.
+
 ---
+
+**Endpoints principais:**
 
 ## 📜 Scripts
 
-- `npm run dev` – Inicia em desenvolvimento com ts-node-dev
-- `npm run build` – Compila TypeScript para `dist/`
-- `npm start` – Executa `node dist/server.js`
+- `POST /api/users/register` - Cadastro de usuário
 
----
+- `POST /api/users/login` - Login- `npm run dev` – Inicia em desenvolvimento com ts-node-dev
 
-## 🔎 Endpoints
+- `POST /api/finances` - Criar financiamento- `npm run build` – Compila TypeScript para `dist/`
 
-Base URL: `http://localhost:3000`
+- `GET /api/finances` - Listar financiamentos- `npm start` – Executa `node dist/server.js`
 
-### Saúde do servidor
-- `GET /` → `{ message, status }` (rota pública)
 
-### Autenticação
-- `POST /api/register`
-	- Body: `{ name: string, email: string, password: string }`
+
+**Autenticação:**---
+
+
+
+Utiliza JWT Bearer token no header `Authorization`.## 🔎 Endpoints
+
+
+
+## 📝 Scripts DisponíveisBase URL: `http://localhost:3000`
+
+
+
+```bash### Saúde do servidor
+
+npm run dev      # Servidor de desenvolvimento- `GET /` → `{ message, status }` (rota pública)
+
+npm run build    # Build de produção
+
+npm run preview  # Preview da build### Autenticação
+
+npm run lint     # Linter (se configurado)- `POST /api/register`
+
+```	- Body: `{ name: string, email: string, password: string }`
+
 	- 200: `{ status, token, user: { id, name, email } }`
-	- 400: Campos obrigatórios ausentes ou senha < 6
+
+## 🤝 Contribuindo	- 400: Campos obrigatórios ausentes ou senha < 6
+
 	- 409: Email em uso
 
-- `POST /api/login`
-	- Body: `{ email: string, password: string }`
-	- 200: `{ status, token, user: { id, name, email } }`
-	- 401: Credenciais inválidas
+1. Fork o projeto
 
-### Rota protegida (exemplo)
+2. Crie uma branch: `git checkout -b feature/nova-feature`- `POST /api/login`
+
+3. Commit: `git commit -m 'feat: adiciona nova feature'`	- Body: `{ email: string, password: string }`
+
+4. Push: `git push origin feature/nova-feature`	- 200: `{ status, token, user: { id, name, email } }`
+
+5. Abra um Pull Request	- 401: Credenciais inválidas
+
+
+
+## 📄 Licença### Rota protegida (exemplo)
+
 - `GET /api/protected`
-	- Header: `Authorization: Bearer <TOKEN>`
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.	- Header: `Authorization: Bearer <TOKEN>`
+
 	- 200: `{ message: '✅ Acesso autorizado.' }`
-	- 401: Token ausente/inválido
 
-### Tarefas (todas exigem JWT via `Authorization: Bearer <TOKEN>`) 
+## 👤 Autor	- 401: Token ausente/inválido
 
-- `POST /api/tasks`
+
+
+**Guilherme Rios**### Tarefas (todas exigem JWT via `Authorization: Bearer <TOKEN>`) 
+
+
+
+- GitHub: [@guilhermerios21](https://github.com/guilhermerios21)- `POST /api/tasks`
+
 	- Body: `{ title: string, description?: string, userId: string }`
-	- Observação: use no `userId` o mesmo `id` do usuário autenticado.
+
+## 🙏 Agradecimentos	- Observação: use no `userId` o mesmo `id` do usuário autenticado.
+
 	- 201: `{ status: 201, task }`
-	- 403: Usuário inválido
-	- 500: Erro ao criar
+
+- Design inspirado em interfaces modernas de fintech	- 403: Usuário inválido
+
+- Comunidade React e Vite por ferramentas incríveis	- 500: Erro ao criar
+
+- TailwindCSS pela produtividade no CSS
 
 - `GET /api/tasks`
-	- Query opcional: `title`, `description`, `completed`
+
+---	- Query opcional: `title`, `description`, `completed`
+
 	- 200: `{ status: 200, tasks }` (somente `deleted: false`)
-	- 404: Nenhuma tarefa encontrada
+
+⭐ Se este projeto te ajudou, considere dar uma estrela!	- 404: Nenhuma tarefa encontrada
+
 
 - `GET /api/tasks/:id`
 	- 200: `{ status: 200, task }`

@@ -23,12 +23,35 @@ const LoanForm: React.FC = () => {
   const [showSimulation, setShowSimulation] = useState(false);
   const [simulation, setSimulation] = useState<any>(null);
 
+  // Calcula taxa de juros baseada no número de parcelas
+  const calculateInterestRate = (months: number): number => {
+    // Taxa base de 6% a.a. para 12 meses
+    // Aumenta progressivamente conforme aumenta o prazo
+    if (months <= 12) return 0.06;
+    if (months <= 24) return 0.08;
+    if (months <= 36) return 0.10;
+    if (months <= 48) return 0.12;
+    return 0.14; // 60 meses
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'type' ? value : name.includes('Rate') || name === 'value' || name === 'downPayment' || name === 'countOfMonths' ? Number(value) : value,
-    }));
+    
+    // Se mudou o número de parcelas, atualiza a taxa de juros automaticamente
+    if (name === 'countOfMonths') {
+      const months = Number(value);
+      const newRate = calculateInterestRate(months);
+      setFormData((prev) => ({
+        ...prev,
+        countOfMonths: months,
+        interestRate: newRate,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: name === 'type' ? value : name === 'value' || name === 'downPayment' ? Number(value) : value,
+      }));
+    }
   };
 
   const handleSimulate = () => {
@@ -201,20 +224,14 @@ const LoanForm: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="interestRate" className="block text-sm font-medium text-gray-900 mb-2">
-              Taxa de Juros Anual (%)
+              Taxa de Juros Anual
             </label>
-            <input
-              type="number"
-              id="interestRate"
-              name="interestRate"
-              value={(formData.interestRate * 100).toFixed(2)}
-              onChange={(e) => setFormData(prev => ({ ...prev, interestRate: Number(e.target.value) / 100 }))}
-              placeholder="8.0"
-              min="0"
-              max="100"
-              step="0.1"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-            />
+            <div className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 font-semibold">
+              {(formData.interestRate * 100).toFixed(2)}% a.a.
+            </div>
+            <p className="text-xs text-gray-600 mt-1">
+              Taxa calculada automaticamente pelo prazo
+            </p>
           </div>
 
           <div>
@@ -228,11 +245,11 @@ const LoanForm: React.FC = () => {
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             >
-              <option value="12">12 meses</option>
-              <option value="24">24 meses</option>
-              <option value="36">36 meses</option>
-              <option value="48">48 meses</option>
-              <option value="60">60 meses</option>
+              <option value="12">12 meses (6% a.a.)</option>
+              <option value="24">24 meses (8% a.a.)</option>
+              <option value="36">36 meses (10% a.a.)</option>
+              <option value="48">48 meses (12% a.a.)</option>
+              <option value="60">60 meses (14% a.a.)</option>
             </select>
           </div>
         </div>

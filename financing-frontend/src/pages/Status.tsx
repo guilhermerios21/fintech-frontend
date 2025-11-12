@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { financeService, formatCurrency, formatDate } from '@services/api';
 import { useAuth } from '@store/index';
 import { IFinance } from '../types';
@@ -76,9 +77,21 @@ const Status: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <MainStyle>
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Acesso Restrito</h2>
-          <p className="text-gray-300">Você precisa estar logado para ver seus financiamentos.</p>
+        <div className="relative">
+          <Link
+            to="/"
+            aria-label="Voltar ao início"
+            className="absolute top-2 left-0 inline-flex items-center text-secondary hover:text-primary transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="sr-only">Início</span>
+          </Link>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-secondary mb-4">Acesso Restrito</h2>
+            <p className="text-muted">Você precisa estar logado para ver seus financiamentos.</p>
+          </div>
         </div>
       </MainStyle>
     );
@@ -105,7 +118,7 @@ const Status: React.FC = () => {
         <div className="space-y-6">
           <button
             onClick={() => setShowSchedule(false)}
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-secondary hover:text-primary transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -114,23 +127,23 @@ const Status: React.FC = () => {
           </button>
 
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
-            <h3 className="text-xl font-bold text-white mb-4">Detalhes do Financiamento</h3>
+            <h3 className="text-xl font-bold text-secondary mb-4">Detalhes do Financiamento</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-gray-400">Veículo:</p>
-                <p className="text-white font-semibold">{selectedFinance.brand} {selectedFinance.modelName}</p>
+                <p className="text-muted">Veículo:</p>
+                <p className="text-secondary font-semibold">{selectedFinance.brand} {selectedFinance.modelName}</p>
               </div>
               <div>
-                <p className="text-gray-400">Tipo:</p>
-                <p className="text-white font-semibold">{selectedFinance.type}</p>
+                <p className="text-muted">Tipo:</p>
+                <p className="text-secondary font-semibold">{selectedFinance.type}</p>
               </div>
               <div>
-                <p className="text-gray-400">Valor Total:</p>
-                <p className="text-white font-semibold">{formatCurrency(selectedFinance.value)}</p>
+                <p className="text-muted">Valor Total:</p>
+                <p className="text-secondary font-semibold">{formatCurrency(selectedFinance.value)}</p>
               </div>
               <div>
-                <p className="text-gray-400">Entrada:</p>
-                <p className="text-white font-semibold">{formatCurrency(selectedFinance.downPayment || 0)}</p>
+                <p className="text-muted">Entrada:</p>
+                <p className="text-secondary font-semibold">{formatCurrency(selectedFinance.downPayment || 0)}</p>
               </div>
             </div>
           </div>
@@ -145,10 +158,22 @@ const Status: React.FC = () => {
     );
   }
 
+  const unauthorizedToken = error === 'Não autorizado: token inválido.';
+
   return (
     <MainStyle>
-      <div className="w-full max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">
+      <div className={`relative w-full max-w-4xl mx-auto ${unauthorizedToken ? 'pt-10' : ''}`}> {/* adiciona espaço extra quando token inválido */}
+        <Link
+          to="/"
+          aria-label="Voltar ao início"
+          className="absolute top-2 left-0 inline-flex items-center text-secondary hover:text-primary transition-colors"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="sr-only">Início</span>
+        </Link>
+        <h2 className="text-3xl font-bold text-secondary mb-6 text-center">
           Meus Financiamentos
         </h2>
 
@@ -160,13 +185,17 @@ const Status: React.FC = () => {
 
         {finances.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 text-lg mb-4">Você ainda não possui financiamentos.</p>
-            <a
-              href="/apply"
-              className="inline-block px-6 py-3 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl transition-colors"
-            >
-              Solicitar Financiamento
-            </a>
+            {user?.role !== 'admin' && (
+              <>
+                <p className="text-muted text-lg mb-4">Você ainda não possui financiamentos.</p>
+                <Link
+                  to="/apply"
+                  className="inline-block px-6 py-3 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl transition-colors"
+                >
+                  Solicitar Financiamento
+                </Link>
+              </>
+            )}
           </div>
         ) : (
           <div className="space-y-4">
@@ -177,10 +206,10 @@ const Status: React.FC = () => {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-1">
+                    <h3 className="text-xl font-semibold text-secondary mb-1">
                       {finance.brand} {finance.modelName}
                     </h3>
-                    <p className="text-gray-400 text-sm">{finance.type}</p>
+                    <p className="text-secondary-light text-sm">{finance.type}</p>
                   </div>
                   <span
                     className={`px-3 py-1 rounded-lg text-sm font-medium border ${getStatusColor(
@@ -193,26 +222,26 @@ const Status: React.FC = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Valor</p>
-                    <p className="text-white font-semibold">{formatCurrency(finance.value)}</p>
+                    <p className="text-muted text-xs mb-1">Valor</p>
+                    <p className="text-secondary font-semibold">{formatCurrency(finance.value)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Parcelas</p>
-                    <p className="text-white font-semibold">{finance.countOfMonths}x</p>
+                    <p className="text-muted text-xs mb-1">Parcelas</p>
+                    <p className="text-secondary font-semibold">{finance.countOfMonths}x</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Taxa</p>
-                    <p className="text-white font-semibold">{(finance.interestRate * 100).toFixed(2)}% a.a.</p>
+                    <p className="text-muted text-xs mb-1">Taxa</p>
+                    <p className="text-secondary font-semibold">{(finance.interestRate * 100).toFixed(2)}% a.a.</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Data</p>
-                    <p className="text-white font-semibold">{formatDate(finance.financeDate)}</p>
+                    <p className="text-muted text-xs mb-1">Data</p>
+                    <p className="text-secondary font-semibold">{formatDate(finance.financeDate)}</p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => handleViewDetails(finance)}
-                  className="w-full mt-2 py-2 bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg transition-colors"
+                  className="w-full mt-2 py-2 bg-white/10 hover:bg-white/20 text-primary font-medium rounded-lg transition-colors"
                 >
                   Ver Detalhes
                 </button>

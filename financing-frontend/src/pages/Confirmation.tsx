@@ -40,7 +40,17 @@ const Confirmation: React.FC = () => {
 
   return (
     <MainStyle>
-      <div className="text-center space-y-6">
+      <div className="relative text-center space-y-6">
+        <Link
+          to="/"
+          aria-label="Voltar ao início"
+          className="absolute top-4 left-4 inline-flex items-center text-secondary hover:text-primary transition-colors"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="sr-only">Início</span>
+        </Link>
         <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
